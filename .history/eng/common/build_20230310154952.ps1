@@ -33,10 +33,9 @@ Param(
 # Unset 'Platform' environment variable to avoid unwanted collision in InstallDotNetCore.targets file
 # some computer has this env var defined (e.g. Some HP)
 if($env:Platform) {
-  $env:Platform=""
+  $env:Platform=""  
 }
-
-function Show-Usage() {
+function Print-Usage() {
   Write-Host "Common settings:"
   Write-Host "  -configuration <value>  Build configuration: 'Debug' or 'Release' (short: -c)"
   Write-Host "  -platform <value>       Platform configuration: 'x86', 'x64' or any valid Platform value to pass to msbuild"
@@ -99,10 +98,10 @@ function Build {
     # Re-assign properties to a new variable because PowerShell doesn't let us append properties directly for unclear reasons.
     # Explicitly set the type as string[] because otherwise PowerShell would make this char[] if $properties is empty.
     [string[]] $msbuildArgs = $properties
-
-    # Resolve relative project paths into full paths
+    
+    # Resolve relative project paths into full paths 
     $projects = ($projects.Split(';').ForEach({Resolve-Path $_}) -join ';')
-
+    
     $msbuildArgs += "/p:Projects=$projects"
     $properties = $msbuildArgs
   }
